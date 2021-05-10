@@ -1,0 +1,40 @@
+{%  extends 'shop/main.html' %}
+
+{% block content %}
+
+<div class="row align-items-start">
+    <div class="col">
+      <h2>Modely</h2>
+
+      {% for model in models %}
+
+      <p><a href="{% url 'detail' model %}">{{ model }}</a></p>
+
+      {% endfor %}
+
+    </div>
+    <div class="col">
+      <h2>Zaznamy</h2>
+
+
+      {% for record in model %}
+
+      <p><a href="{{ record.id }}">{{ record }}</a></p>
+
+      {% endfor %}
+      {{ record }}
+    </div>
+    <div class="col">
+      <h2>Detail zaznamu</h2>
+
+      {% for i in all_fields %}
+        <p>{{i.verbose_name}}: {{record}}</p>
+      {% endfor %}
+
+
+
+    </div>
+  </div>
+
+
+{% endblock %}

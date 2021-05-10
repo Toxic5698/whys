@@ -1,0 +1,38 @@
+{%  extends 'shop/main.html' %}
+<p>import</p>
+
+<p>{{ product }}</p>
+
+
+
+<form action="/import/" data-method="PUT" class="form-horizontal">
+  <fieldset>
+
+    <div class="form-group">
+      <label for="id__content_type" class="col-sm-2 control-label">Media type:</label>
+        <div class="col-sm-10">
+          <select name="_content_type" data-override="content-type" id="id__content_type" class="form-control">
+            <option value="application/json" selected="">application/json</option>
+
+            <option value="application/x-www-form-urlencoded">application/x-www-form-urlencoded</option>
+
+            <option value="multipart/form-data">multipart/form-data</option>
+
+          </select>
+          <span class="help-block"></span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="id__content" class="col-sm-2 control-label">Content:</label>
+        <div class="col-sm-10">
+          <textarea name="_content" cols="40" rows="10" data-override="content" id="id__content" class="form-control"></textarea>
+          <span class="help-block"></span>
+        </div>
+      </div>
+
+          <div class="form-actions">
+            <button class="btn btn-primary js-tooltip" title="" data-original-title="Make a PUT request on the Import resource">PUT</button>
+          </div>
+  </fieldset>
+</form>

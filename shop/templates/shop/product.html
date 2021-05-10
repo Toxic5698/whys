@@ -1,0 +1,47 @@
+{%  extends 'shop/main.html' %}
+
+{% load static %}
+
+{% block content %}
+<h2>Produkty</h2>
+<hr>
+<h3>Filtr</h3>
+<form method="get">
+          {{ filter.form }}
+
+  <button class="btn btn-primary" type="submit">Hledat</button>
+</form>
+<hr>
+<h3>Vyhledavani</h3>
+
+{% if q %}
+<h6>Vysledky hledani "{{ q }}"</h6>
+<p>
+    {% with results.count as total_results %}
+    Pocet vysledku: {{ total_results }}
+    {% endwith %}
+</p>
+            {% for product in results %}
+                <a class="text-dark" href="">{{product.name}}</a>
+            {% empty %}
+            <p>Zadne shody.</p>
+            {% endfor %}
+<p><a href="{% url 'search' %}" class="btn btn-primary" role="button" aria-disabled="true">Nove hledani</a>
+</p>
+{% else %}
+<form method="get">
+    {{ form.as_p }}
+    <input class="btn btn-primary my-1" type="submit" value="Hledani">
+</form>
+{% endif %}
+
+<hr>
+<h3>Seznam produktu</h3>
+{% for i in products %}
+
+<p>{{i.nazev}}</p>
+
+
+{% endfor %}
+
+{% endblock %}
