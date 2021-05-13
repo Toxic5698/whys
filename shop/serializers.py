@@ -7,17 +7,15 @@ class AttrNameSerializer(serializers.ModelSerializer):
     # code = serializers.CharField(source='kod')
     # show = serializers.BooleanField(source='zobrazit')
 
-
     class Meta:
         model = AttributeName
-        fields = '__all__'
+        fields = "__all__"
 
 
 class AttrValueSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = AttributeValue
-        fields = '__all__'
+        fields = "__all__"
 
 
 class AttrSerializer(serializers.ModelSerializer):
@@ -26,21 +24,21 @@ class AttrSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Attribute
-        fields = '__all__'
+        fields = "__all__"
+
 
 class ProductAttrSerializer(serializers.ModelSerializer):
-    #attr = AttrSerializer(many=True)
+    # attr = AttrSerializer(many=True)
 
     class Meta:
         model = ProductAttributes
-        fields = '__all__'
+        fields = "__all__"
 
 
 class ImagesSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Image
-        fields = '__all__'
+        fields = "__all__"
 
 
 class ProductImgSerializer(serializers.ModelSerializer):
@@ -48,7 +46,7 @@ class ProductImgSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductImage
-        fields = '__all__'
+        fields = "__all__"
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -57,7 +55,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = '__all__'
+        fields = "__all__"
 
 
 class CatalogSerializer(serializers.ModelSerializer):
@@ -65,5 +63,5 @@ class CatalogSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Catalog
-        fields = '__all__'
-        extra_kwargs = {'products': {'required': False}}
+        fields = "__all__"
+        extra_kwargs = {"products": {"required": False}}

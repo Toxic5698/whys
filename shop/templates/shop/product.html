@@ -4,13 +4,7 @@
 
 {% block content %}
 <h2>Produkty</h2>
-<hr>
-<h3>Filtr</h3>
-<form method="get">
-          {{ filter.form }}
 
-  <button class="btn btn-primary" type="submit">Hledat</button>
-</form>
 <hr>
 <h3>Vyhledavani</h3>
 
@@ -21,13 +15,24 @@
     Pocet vysledku: {{ total_results }}
     {% endwith %}
 </p>
-            {% for product in results %}
-                <a class="text-dark" href="">{{product.name}}</a>
-            {% empty %}
-            <p>Zadne shody.</p>
-            {% endfor %}
+<br>
+    {% for product in results %}
+    <div class="card" style="width: 18rem;">
+      <img src="" class="card-img-top" alt="obrazek k produktu">
+      <div class="card-body">
+        <h5 class="card-title">{{product.nazev}}</h5>
+        <p class="card-text">{{product.description}}</p>
+        <a href="#" class="btn btn-primary">Detail</a>
+      </div>
+    </div>
+    {% empty %}
+    <p>Zadne shody.</p>
+    {% endfor %}
+<br>
+
 <p><a href="{% url 'search' %}" class="btn btn-primary" role="button" aria-disabled="true">Nove hledani</a>
 </p>
+
 {% else %}
 <form method="get">
     {{ form.as_p }}
@@ -43,5 +48,13 @@
 
 
 {% endfor %}
+
+<hr>
+<h3>Filtr</h3>
+<form method="get">
+          {{ filter.form }}
+
+  <button class="btn btn-primary" type="submit">Hledat</button>
+</form>
 
 {% endblock %}

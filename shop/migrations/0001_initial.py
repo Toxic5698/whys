@@ -8,86 +8,264 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Attribute',
+            name="Attribute",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='AttributeName',
+            name="AttributeName",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(blank=True, max_length=200, null=True, verbose_name='Nazev atributu')),
-                ('code', models.CharField(blank=True, max_length=200, null=True, verbose_name='Kod')),
-                ('show', models.BooleanField(blank=True, default=False, verbose_name='Zobrazen')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        blank=True,
+                        max_length=200,
+                        null=True,
+                        verbose_name="Nazev atributu",
+                    ),
+                ),
+                (
+                    "code",
+                    models.CharField(
+                        blank=True, max_length=200, null=True, verbose_name="Kod"
+                    ),
+                ),
+                (
+                    "show",
+                    models.BooleanField(
+                        blank=True, default=False, verbose_name="Zobrazen"
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='AttributeValue',
+            name="AttributeValue",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('value', models.CharField(blank=True, max_length=200, null=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("value", models.CharField(blank=True, max_length=200, null=True)),
             ],
         ),
         migrations.CreateModel(
-            name='Image',
+            name="Image",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('link', models.CharField(blank=True, max_length=400, null=True, verbose_name='Link obrazku')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "link",
+                    models.CharField(
+                        blank=True,
+                        max_length=400,
+                        null=True,
+                        verbose_name="Link obrazku",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='ProductImage',
+            name="ProductImage",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(blank=True, max_length=200, null=True, verbose_name='Nazev obrazku')),
-                ('img', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='shop.image')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        blank=True,
+                        max_length=200,
+                        null=True,
+                        verbose_name="Nazev obrazku",
+                    ),
+                ),
+                (
+                    "img",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="shop.image",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='ProductAttributes',
+            name="ProductAttributes",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('attr', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='shop.attribute')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "attr",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="shop.attribute",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Product',
+            name="Product",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(blank=True, max_length=200, null=True, verbose_name='Nazev')),
-                ('description', models.TextField(blank=True, default=None, max_length=999, null=True, verbose_name='Popis')),
-                ('price', models.CharField(blank=True, max_length=200, null=True, verbose_name='Cena')),
-                ('currency', models.CharField(blank=True, choices=[('CZK', 'CZK'), ('EUR', 'EUR')], default=False, max_length=3, verbose_name='Mena')),
-                ('published_on', models.CharField(blank=True, max_length=200, null=True, verbose_name='Publikovano dne')),
-                ('is_published', models.BooleanField(blank=True, default=False, verbose_name='Publikovano')),
-                ('attrs', models.ManyToManyField(blank=True, to='shop.ProductAttributes')),
-                ('images', models.ManyToManyField(blank=True, to='shop.ProductImage')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        blank=True, max_length=200, null=True, verbose_name="Nazev"
+                    ),
+                ),
+                (
+                    "description",
+                    models.TextField(
+                        blank=True,
+                        default=None,
+                        max_length=999,
+                        null=True,
+                        verbose_name="Popis",
+                    ),
+                ),
+                (
+                    "price",
+                    models.CharField(
+                        blank=True, max_length=200, null=True, verbose_name="Cena"
+                    ),
+                ),
+                (
+                    "currency",
+                    models.CharField(
+                        blank=True,
+                        choices=[("CZK", "CZK"), ("EUR", "EUR")],
+                        default=False,
+                        max_length=3,
+                        verbose_name="Mena",
+                    ),
+                ),
+                (
+                    "published_on",
+                    models.CharField(
+                        blank=True,
+                        max_length=200,
+                        null=True,
+                        verbose_name="Publikovano dne",
+                    ),
+                ),
+                (
+                    "is_published",
+                    models.BooleanField(
+                        blank=True, default=False, verbose_name="Publikovano"
+                    ),
+                ),
+                (
+                    "attrs",
+                    models.ManyToManyField(blank=True, to="shop.ProductAttributes"),
+                ),
+                ("images", models.ManyToManyField(blank=True, to="shop.ProductImage")),
             ],
         ),
         migrations.CreateModel(
-            name='Catalog',
+            name="Catalog",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(blank=True, max_length=200, null=True, verbose_name='Nazev katalogu')),
-                ('attrs', models.ManyToManyField(blank=True, to='shop.Attribute')),
-                ('img', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='shop.image')),
-                ('products', models.ManyToManyField(blank=True, to='shop.Product')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        blank=True,
+                        max_length=200,
+                        null=True,
+                        verbose_name="Nazev katalogu",
+                    ),
+                ),
+                ("attrs", models.ManyToManyField(blank=True, to="shop.Attribute")),
+                (
+                    "img",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="shop.image",
+                    ),
+                ),
+                ("products", models.ManyToManyField(blank=True, to="shop.Product")),
             ],
         ),
         migrations.AddField(
-            model_name='attribute',
-            name='name',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='shop.attributename'),
+            model_name="attribute",
+            name="name",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="shop.attributename",
+            ),
         ),
         migrations.AddField(
-            model_name='attribute',
-            name='value',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='shop.attributevalue'),
+            model_name="attribute",
+            name="value",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="shop.attributevalue",
+            ),
         ),
     ]
