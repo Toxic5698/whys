@@ -1,12 +1,9 @@
-import django_filters
-from django_filters import CharFilter
+from django_filters import rest_framework as filters
 from .models import Product
 
 
-class ProductFilter(django_filters.FilterSet):
-    name = CharFilter(field_name="name", lookup_expr="icontains")
-    description = CharFilter(field_name="description", lookup_expr="icontains")
+class ProductFilter(filters.FilterSet):
 
     class Meta:
         model = Product
-        fields = ["name", "description"]
+        fields = '__all__'

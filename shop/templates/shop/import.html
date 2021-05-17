@@ -1,10 +1,19 @@
 {%  extends 'shop/main.html' %}
-<p>import</p>
+{% block content %}
+<h3>Import dat</h3>
 
-{% load rest_framework %}
-
-<form action="" method="PUT">
-    {% csrf_token %}
-    {% render_form serializer %}
-    <input type="submit" value="Save" />
+<div class="mb-3">
+  <label for="formFile" class="form-label">Vlozte soubor pro import dat</label>
+  <input class="form-control" type="file" id="formFile">
+</div>
+<p>nebo</p>
+<form class="" action="" method="POST">
+  <div class="mb-3">
+    <label for="text_import" class="form-label">Vlozte data pro import</label>
+    <textarea class="form-control" id="text_import" rows="20" placeholder="{{ placeholder }}"></textarea>
+  </div>
+  <input class="btn btn-primary" type="submit" name="text_import" value="Uložit">
 </form>
+
+
+{% endblock %}

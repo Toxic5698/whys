@@ -1,5 +1,14 @@
 from rest_framework import serializers
-from .models import *
+from .models import (
+    AttributeName,
+    AttributeValue,
+    Attribute,
+    Image,
+    Product,
+    ProductAttributes,
+    ProductImage,
+    Catalog
+)
 
 
 class AttrNameSerializer(serializers.ModelSerializer):

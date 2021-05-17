@@ -3,15 +3,21 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
 
 from django.contrib import messages
-from django.contrib.postgres.search import SearchVector
 
+from django.contrib.postgres.search import (
+    TrigramSimilarity,
+    SearchQuery,
+    SearchRank,
+    SearchVector
+)
+# for proper functionality of TrigramSimilarity is needed to add to postgres
+# CREATE EXTENSION pg_trgm; from postgresql-contrib
+from itertools import chain
 
 from django.apps import apps
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-
-from django.db.models import Q
 
 from rest_framework import status, generics
 from rest_framework.response import Response
@@ -19,8 +25,28 @@ from rest_framework.views import APIView
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.permissions import IsAuthenticated
 
-from .models import *
-from .serializers import *
+from django_filters import rest_framework as filters
+
+from .models import (
+    AttributeName,
+    AttributeValue,
+    Attribute,
+    Image,
+    Product,
+    ProductAttributes,
+    ProductImage,
+    Catalog
+)
+from .serializers import (
+    AttrNameSerializer,
+    AttrValueSerializer,
+    AttrSerializer,
+    ImagesSerializer,
+    ProductSerializer,
+    ProductAttrSerializer,
+    ProductImgSerializer,
+    CatalogSerializer
+)
 from .filters import ProductFilter
 from .forms import CreateUserForm, ProductSearchForm
 
@@ -30,7 +56,7 @@ from .forms import CreateUserForm, ProductSearchForm
 def registerPage(request):
     form = CreateUserForm()
     if request.user.is_authenticated:
-        return redirect("detail")
+        return redirect("product")
     else:
         if request.method == "POST":
             form = CreateUserForm(request.POST)
@@ -48,7 +74,7 @@ def registerPage(request):
 
 def loginPage(request):
     if request.user.is_authenticated:
-        return redirect("detail")
+        return redirect("product")
     else:
         if request.method == "POST":
             username = request.POST.get("username")
@@ -58,7 +84,7 @@ def loginPage(request):
 
             if user is not None:
                 login(request, user)
-                return redirect("detail")
+                return redirect("product")
             else:
                 messages.warning(
                     request, f"Nesprávný uživatel nebo heslo, zkuste znovu."
@@ -73,7 +99,7 @@ def logoutUser(request):
     return redirect("login")
 
 
-class Import(LoginRequiredMixin, APIView):  # HTMLformrender?
+class Import(LoginRequiredMixin, APIView):
     """
     Import data in json.
     Transfer_dict and for loop serve transfer name of 'model' to serializer.
@@ -100,6 +126,7 @@ class Import(LoginRequiredMixin, APIView):  # HTMLformrender?
             "Product": ProductSerializer,
             "Catalog": CatalogSerializer,
         }
+
         for i in request.data:
             model = "".join(i)
             if model in transfer_dict:
@@ -194,43 +221,57 @@ class ProductList(generics.ListAPIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = "shop/product.html"
 
+    serializer_class = ProductSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = ProductFilter
+
     def get(self, request):
+        products = Product.objects.all()
 
         # searching
-        search = Product.objects.annotate(
-            search=SearchVector("nazev") + SearchVector("description"),
-        ).filter(search="whirl")
-
-        print(search)
-
         form = ProductSearchForm()
         q = ""
         results = []
-        query = Q()
         if "q" in request.GET:
             form = ProductSearchForm(request.GET)
             if form.is_valid():
                 q = form.cleaned_data["q"]
                 if q is not None:
-                    query &= Q(nazev__contains=q)
-
-                results = Product.objects.filter(query)
+                    vector = SearchVector('description', weight='A')
+                    query = SearchQuery(q)
+                    nazev_search = Product.objects.annotate(
+                        similarity=TrigramSimilarity('nazev', q)
+                        ).filter(similarity__gt=0.1).order_by('-similarity')
+                    description_search = Product.objects.annotate(
+                            rank=SearchRank(vector, query)
+                        ).filter(rank__gte=0.1).order_by('-rank')
+                    results = set(chain(nazev_search, description_search))
 
         # filtering
 
         # rendering
-        try:
-            products = Product.objects.all()
-            filter = ProductFilter(request.GET, queryset=products)
-            product = filter.qs
+        context = {
+            "form": form,
+            "q": q,
+            "results": results,
+            "products": products,
+        }
+        return Response(context)
 
-            context = {
-                "form": form,
-                "q": q,
-                "results": results,
-                "products": products,
-                "filter": filter,
-            }
-            return Response(context)
-        except Product.DoesNotExist:
-            raise Http404
+
+class ProductDetail(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'shop/product_detail.html'
+
+    def get(self, request, pk):
+        product = get_object_or_404(Product, pk=pk)
+        serializer = ProductSerializer(product)
+        return Response({'serializer': serializer, 'product': product})
+
+    def post(self, request, pk):
+        product = get_object_or_404(Product, pk=pk)
+        serializer = ProductSerializer(product, data=request.data)
+        if not serializer.is_valid():
+            return Response({'serializer': serializer, 'product': product})
+        serializer.save()
+        return redirect('product')
