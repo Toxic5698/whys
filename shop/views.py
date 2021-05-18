@@ -48,7 +48,7 @@ from .serializers import (
     CatalogSerializer
 )
 from .filters import ProductFilter
-from .forms import CreateUserForm, ProductSearchForm
+from .forms import CreateUserForm, ProductSearchForm, ImportDataForm
 
 # Create your views here.
 
@@ -138,7 +138,7 @@ class Import(LoginRequiredMixin, APIView):
                     )
                     if serializer.is_valid():
                         serializer.save()
-                except:
+                except Http404:
                     serializer = transfer_dict[model](data=i.get(model))
                     if serializer.is_valid():
                         serializer.save()
@@ -147,7 +147,7 @@ class Import(LoginRequiredMixin, APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class RecordsList(generics.ListAPIView):
+class RecordsList(APIView):
     """
     Get list of records according model through url <modelName>.
     """
@@ -166,7 +166,7 @@ class RecordsList(generics.ListAPIView):
             raise Http404
 
 
-class RecordDetail(generics.ListAPIView):
+class RecordDetail(APIView):
     """
     Get detail for record.
     """
@@ -213,7 +213,7 @@ class RecordDetail(generics.ListAPIView):
             raise Http404
 
 
-class ProductList(generics.ListAPIView):
+class ProductList(APIView):
     """
     Get list of products.
     """

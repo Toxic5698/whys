@@ -12,7 +12,7 @@ class CreateUserForm(UserCreationForm):
 
 class ImportDataForm(forms.Form):
     # file_import = ...
-    text_import = forms.CharField()
+    text_import = forms.JSONField()
 
     class Meta:
         fields = [
