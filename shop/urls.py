@@ -3,8 +3,6 @@ from . import views
 from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework_simplejwt import views as jwt_views
 
-# from .views import RecordsList, RecordDetail
-
 
 urlpatterns = [
     path(
@@ -21,22 +19,11 @@ urlpatterns = [
     path("login/", views.loginPage, name="login"),
     path("logout/", views.logoutUser, name="logout"),
     path("import/", views.Import.as_view(), name="import"),
-    path("detail/<str:modelName>/", views.RecordsList.as_view(), name="list"),
+    path("detail/<str:model_name>/", views.RecordsList.as_view(), name="list"),
     path(
-        "detail/<str:modelName>/<int:pk>/",
+        "detail/<str:model_name>/<int:pk>/",
         views.RecordDetail.as_view(),
         name="detail"
     ),
     path("product/", views.ProductList.as_view(), name="product"),
-    path(
-        "product-detail/<int:pk>/",
-        views.ProductDetail.as_view(),
-        name="product-detail"
-    ),
 ]
-
-urlpatterns = format_suffix_patterns(urlpatterns)
-
-# if settings.DEBUG:
-#     urlpatterns += static(
-#           settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

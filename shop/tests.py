@@ -3,7 +3,7 @@ from django.test import TestCase, Client
 
 from django.urls import reverse, resolve
 
-from .forms import CreateUserForm, ProductSearchForm
+from .forms import CreateUserForm
 from .models import (
     AttributeName,
     AttributeValue,
@@ -48,24 +48,11 @@ class TestURLs(unittest.TestCase):
         url = reverse('list', args=['attribute'])
         self.assertEquals(resolve(url).func.view_class, RecordsList)
 
-    # def test_detail(self):
-    #     self.attribute = AttributeName.objects.create(
-    #         nazev='Barva',
-    #         kod='Paint',
-    #         zobrazit=True
-    #     )
-    #     modelNames = [
-    #         # 'attribute',
-    #         'attributename',
-    #         # 'attributevalue',
-    #         # 'image',
-    #         # 'product',
-    #         # 'catalog'
-    #         ]
-    #
-    #     for model in modelNames:
-    #         url = reverse(f"/detail/{model}/{str(self.attribute.id)}")
-    #         self.assertEquals(resolve(url).func.view_class, RecordsDetail)
+    def test_detail(self):
+        url = reverse('detail', kwargs={
+            'model_name': 'attributename', 'pk': '1'
+        })
+        self.assertEquals(resolve(url).func.view_class, RecordDetail)
 
     def test_product(self):
         url = reverse('product')
@@ -152,8 +139,8 @@ class ViewsTest(unittest.TestCase):
             # products_ids=[1]
         )
 
-    def test_records_list_status(self):
-        modelNames = [
+    def test_records_list_status_ok(self):
+        model_names = [
             'attribute',
             'attributename',
             'attributevalue',
@@ -161,10 +148,14 @@ class ViewsTest(unittest.TestCase):
             'product',
             'catalog'
             ]
-        for model in modelNames:
+        for model in model_names:
             with self.subTest(model=model):
                 response = self.client.get(reverse('list', args=[model]))
                 self.assertEquals(response.status_code, 200)
+
+    def test_records_list_status_nok(self):
+        response = self.client.get(reverse('list', args=['model']))
+        self.assertEquals(response.status_code, 404)
 
     def test_get_queryset(self):
         self.assertEquals(self.attrname.nazev, 'Barva')
@@ -181,8 +172,8 @@ class ViewsTest(unittest.TestCase):
         self.assertEquals(self.catalog.nazev, 'vyprodej')
         self.assertEquals(self.catalog.obrazek_id.id, 1)
 
-    # def test_record_detail_status(self):
-    #     modelNames = [
+    # def test_records_list_queryset(self):
+    #     model_names = [
     #         'attribute',
     #         'attributename',
     #         'attributevalue',
@@ -190,12 +181,27 @@ class ViewsTest(unittest.TestCase):
     #         'product',
     #         'catalog'
     #         ]
-    #     for model in modelNames:
+    #     for model in model_names:
     #         with self.subTest(model=model):
-    #             response = self.client.get(
-    #                 reverse(f"/detail/{model}/1/"
-    #                 ))
-    #             self.assertEquals(response.status_code, 200)
+    #             response = self.client.get(reverse('list', args=[model]))
+    #             self.assertEquals(response, model)
+
+    def test_record_detail_status(self):
+        model_names = [
+            'attribute',
+            'attributename',
+            'attributevalue',
+            'image',
+            'product',
+            'catalog'
+            ]
+        for model in model_names:
+            with self.subTest(model=model):
+                response = self.client.get(
+                    reverse('detail', kwargs={
+                        'model_name': model, 'pk': 2
+                    }))
+                self.assertEquals(response.status_code, 200)
 
     def test_product_list_status(self):
         response = self.client.get(reverse('product'))

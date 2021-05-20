@@ -15,12 +15,17 @@ def make_published(modeladmin, request, queryset):
 make_published.short_description = "Mark selected products as published"
 
 
-# class ProductAttributesAdmin(admin.ModelAdmin):
-#     list_display = ('nazev_atributu_id', 'hodnota_atributu_id')
+class ProductAttributesInline(admin.StackedInline):
+    model = ProductAttributes
+
+
+class ProductImageInline(admin.TabularInline):
+    model = ProductImage
 
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('nazev', 'is_published', 'description')
+    list_filter = ('is_published', 'productattributes__attribute')
     search_fields = ['nazev', 'description']
     actions = [make_published]
     fieldsets = [
@@ -32,7 +37,9 @@ class ProductAdmin(admin.ModelAdmin):
             'published_on',
             'is_published']}
         ),
-        # ('Attributy', {'fields': ['product.productattributes_set.all']})
+    ]
+    inlines = [
+        ProductAttributesInline, ProductImageInline
     ]
 
 
@@ -41,8 +48,6 @@ admin.site.register(AttributeValue)
 admin.site.register(Attribute)
 admin.site.register(Image)
 admin.site.register(Product, ProductAdmin)
-admin.site.register(ProductAttributes,
-#    ProductAttributesAdmin
-)
+admin.site.register(ProductAttributes)
 admin.site.register(ProductImage)
 admin.site.register(Catalog)

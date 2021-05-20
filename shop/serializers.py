@@ -12,9 +12,6 @@ from .models import (
 
 
 class AttrNameSerializer(serializers.ModelSerializer):
-    # name = serializers.CharField(source="nazev")
-    # code = serializers.CharField(source='kod')
-    # show = serializers.BooleanField(source='zobrazit')
 
     class Meta:
         model = AttributeName
@@ -28,8 +25,6 @@ class AttrValueSerializer(serializers.ModelSerializer):
 
 
 class AttrSerializer(serializers.ModelSerializer):
-    # name = AttrNameSerializer(many=True)
-    # value = AttrValueSerializer(many=True)
 
     class Meta:
         model = Attribute
@@ -37,7 +32,6 @@ class AttrSerializer(serializers.ModelSerializer):
 
 
 class ProductAttrSerializer(serializers.ModelSerializer):
-    # attr = AttrSerializer(many=True)
 
     class Meta:
         model = ProductAttributes
@@ -51,26 +45,28 @@ class ImagesSerializer(serializers.ModelSerializer):
 
 
 class ProductImgSerializer(serializers.ModelSerializer):
-    # img_id = ImagesSerializer(many=True)
 
     class Meta:
         model = ProductImage
         fields = "__all__"
 
 
-class ProductSerializer(serializers.ModelSerializer):
-    # images = ProductImgSerializer(many=True)
-    # attrs = ProductAttrSerializer(many=True)
-
-    class Meta:
-        model = Product
-        fields = "__all__"
-
-
 class CatalogSerializer(serializers.ModelSerializer):
-    # products = ProductSerializer(many=True)
 
     class Meta:
         model = Catalog
         fields = "__all__"
-        extra_kwargs = {"products": {"required": False}}
+
+
+class ProductSerializer(serializers.ModelSerializer):
+    productattributes_set = ProductAttrSerializer(many=True)
+    productimage_set = ProductImgSerializer(many=True)
+    catalog_set = CatalogSerializer(many=True)
+
+    class Meta:
+        model = Product
+        fields = [
+            'nazev', 'description', 'cena', 'mena',
+            'published_on', 'is_published',
+            'productattributes_set', 'productimage_set', 'catalog_set'
+        ]
