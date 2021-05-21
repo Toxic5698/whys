@@ -13,8 +13,9 @@ from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-import django_filters.rest_framework as dfrf
 from rest_framework import filters
+
+import django_filters.rest_framework as dfrf
 
 from .models import (
     AttributeName,
@@ -122,7 +123,7 @@ class Import(LoginRequiredMixin, APIView):
                         control_dict[count] = serializer.data
                     else:
                         control_dict[
-                            f'NEULOZENO, nespravny model {count}'
+                            f'NEULOZENO, chyba v datech {count}'
                         ] = i
 
                 except Http404:
@@ -132,7 +133,7 @@ class Import(LoginRequiredMixin, APIView):
                         control_dict[count] = serializer.data
                     else:
                         control_dict[
-                            f'NEULOZENO, nespravny model {count}'
+                            f'NEULOZENO, chyba v datech {count}'
                         ] = i
             else:
                 control_dict[
@@ -188,15 +189,6 @@ class RecordDetail(APIView):
                 serializer = transfer_dict[
                     str(model.__name__)
                 ](record, many=False)
-                items = list(serializer.data.values())
-                all_fields = model()._meta.fields
-                item_dict = {}
-                for key in all_fields:
-                    for value in items:
-                        item_dict[key.verbose_name.title()] = value
-                        items.remove(value)
-                        break
-
             return Response(serializer.data)
         except LookupError:
             raise Http404
@@ -209,9 +201,5 @@ class ProductList(generics.ListAPIView):
         dfrf.DjangoFilterBackend,
         filters.SearchFilter
     ]
-    # filterset_fields = [
-    #     'productattributes__attribute__nazev_atributu_id',
-    #     'productattributes__attribute__hodnota_atributu_id',
-    # ]
     search_fields = ['nazev', 'description']
     filterset_class = ProductFilter

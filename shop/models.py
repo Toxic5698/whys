@@ -154,7 +154,7 @@ class ProductImage(models.Model):
 
 class Catalog(models.Model):
     nazev = models.CharField(
-        max_length=200, null=True, blank=True, verbose_name="Nazev katalogu"
+        max_length=200, null=True, default='Katalog', verbose_name="Nazev katalogu"
     )
     obrazek_id = models.ForeignKey(
         Image, null=True, on_delete=models.SET_NULL, verbose_name="Obrazek ID"
