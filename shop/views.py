@@ -25,9 +25,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 from .filters import ProductFilter
-from .models import (
-    User,
-    Product)
+from .models import User, Product
 from .renderers import UserRenderer
 from .serializers import (
     RegisterSerializer,
@@ -41,7 +39,8 @@ from .serializers import (
     ProductSerializer,
     ProductAttrSerializer,
     ProductImgSerializer,
-    CatalogSerializer)
+    CatalogSerializer,
+)
 from .utils import Util
 
 

@@ -40,8 +40,7 @@ class TestURLs(APITestCase):
         self.assertEquals(resolve(url).func.view_class, RecordsList)
 
     def test_detail(self):
-        url = reverse("detail", kwargs={
-            "model_name": "attributename", "pk": "1"})
+        url = reverse("detail", kwargs={"model_name": "attributename", "pk": "1"})
         self.assertEquals(resolve(url).func.view_class, RecordDetail)
 
     def test_product(self):
