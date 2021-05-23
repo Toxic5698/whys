@@ -5,3 +5,5 @@ djangorestframework-simplejwt==4.6.0
 drf-jwt==1.19.0
 psycopg2==2.8.6
 PyJWT==1.7.1
+drf-yasg==1.20.0
+Faker==8.2.1

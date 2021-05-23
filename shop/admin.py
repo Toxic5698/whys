@@ -7,11 +7,14 @@ from .models import (
     Product,
     ProductAttributes,
     ProductImage,
-    Catalog
+    Catalog,
 )
+
 
 def make_published(modeladmin, request, queryset):
     queryset.update(is_published=True)
+
+
 make_published.short_description = "Mark selected products as published"
 
 
@@ -24,23 +27,26 @@ class ProductImageInline(admin.TabularInline):
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('nazev', 'is_published', 'description')
-    list_filter = ('is_published', 'productattributes__attribute')
-    search_fields = ['nazev', 'description']
+    list_display = ("nazev", "is_published", "description")
+    list_filter = ("is_published", "productattributes__attribute")
+    search_fields = ["nazev", "description"]
     actions = [make_published]
     fieldsets = [
-        ('Zakladni udaje',{'fields': [
-            'nazev',
-            'description',
-            'cena',
-            'mena',
-            'published_on',
-            'is_published']}
+        (
+            "Zakladni udaje",
+            {
+                "fields": [
+                    "nazev",
+                    "description",
+                    "cena",
+                    "mena",
+                    "published_on",
+                    "is_published",
+                ]
+            },
         ),
     ]
-    inlines = [
-        ProductAttributesInline, ProductImageInline
-    ]
+    inlines = [ProductAttributesInline, ProductImageInline]
 
 
 admin.site.register(AttributeName)

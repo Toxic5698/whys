@@ -9,6 +9,8 @@ class ProductFilter(filters.FilterSet):
 
     class Meta:
         model = Product
-        fields = ['productattributes',]
+        fields = [
+            "productattributes",
+        ]
 
-        #provazani mezi Attribute pres ProductAttributes do Product
+        # provazani mezi Attribute pres ProductAttributes do Product
