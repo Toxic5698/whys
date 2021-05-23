@@ -1,4 +1,4 @@
-##Whys test shop 
+## Whys test shop 
 Test project in Django REST Framework with postgres database
 
 1. install requirements from requirments.txt
