@@ -130,7 +130,7 @@ class LogoutAPIView(generics.GenericAPIView):
 
 class Import(APIView):
 
-    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = (permissions.IsAuthenticated,)
 
     def get_object(self, model, pk):
         Model = apps.get_model("shop", model)
@@ -158,7 +158,10 @@ class Import(APIView):
                         serializer.save()
                         control_dict[count] = serializer.data
                     else:
-                        control_dict[f"NEULOZENO, update_fail {count}"] = i
+                        serializer.is_valid()
+                        control_dict[
+                            f"NEULOZENO, update_fail {count}"
+                        ] = serializer.errors
 
                 except Http404:
                     serializer = transfer_dict[model](data=i.get(model))
@@ -166,7 +169,10 @@ class Import(APIView):
                         serializer.save()
                         control_dict[count] = serializer.data
                     else:
-                        control_dict[f"NEULOZENO, create_fail {count}"] = i
+                        serializer.is_valid()
+                        control_dict[
+                            f"NEULOZENO, create_fail {count}"
+                        ] = serializer.errors
                 except AttributeError:
                     control_dict[f"NEULOZENO, wrong_data {count}"] = i
             else:

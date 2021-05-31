@@ -143,9 +143,6 @@ class CatalogSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    # productattributes_set = ProductAttrSerializer(many=True)
-    # productimage_set = ProductImgSerializer(many=True)
-    # catalog_set = CatalogSerializer(many=True)
 
     class Meta:
         model = Product
@@ -156,5 +153,4 @@ class ProductSerializer(serializers.ModelSerializer):
             "mena",
             "published_on",
             "is_published",
-            # 'productattributes_set', 'productimage_set', 'catalog_set'
         ]

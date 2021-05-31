@@ -31,7 +31,7 @@ class SerializersTest(APITestCase):
             )
         ).data
 
-        self.assertEqual(set(data.keys()), set(["id", "nazev", "kod", "zobrazit"]))
+        self.assertEqual(set(data.keys()), {"id", "nazev", "kod", "zobrazit"})
 
     def test_fields_attributevalue(self):
         data = AttrValueSerializer(
@@ -40,7 +40,7 @@ class SerializersTest(APITestCase):
             )
         ).data
 
-        self.assertEqual(set(data.keys()), set(["id", "hodnota"]))
+        self.assertEqual(set(data.keys()), {"id", "hodnota"})
 
     def test_fields_attribute(self):
         data = AttrSerializer(
@@ -51,8 +51,7 @@ class SerializersTest(APITestCase):
         ).data
 
         self.assertEqual(
-            set(data.keys()), set(["id", "nazev_atributu_id", "hodnota_atributu_id"])
-        )
+            set(data.keys()), {"id", "nazev_atributu_id", "hodnota_atributu_id"})
 
     def test_fields_image(self):
         data = ImagesSerializer(
@@ -125,8 +124,7 @@ class SerializersTest(APITestCase):
         ).data
 
         self.assertEqual(
-            set(data.keys()), set(["id", "nazev", "product", "obrazek_id"])
-        )
+            set(data.keys()), {"id", "nazev", "product", "obrazek_id"})
 
     def test_fields_catalog(self):
         data = CatalogSerializer(
@@ -138,5 +136,4 @@ class SerializersTest(APITestCase):
 
         self.assertEqual(
             set(data.keys()),
-            set(["id", "nazev", "obrazek_id", "products_ids", "attributes_ids"]),
-        )
+            {"id", "nazev", "obrazek_id", "products_ids", "attributes_ids"})

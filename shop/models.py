@@ -128,6 +128,7 @@ class ProductAttributes(models.Model):
     attribute = models.ForeignKey(
         Attribute,
         null=True,
+        blank=True,
         on_delete=models.SET_NULL,
         verbose_name="Atribut ID",
         related_name="productattributes",
